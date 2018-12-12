@@ -1,7 +1,6 @@
 """
 Program to check if all the wires are working and the Pi can communicate with the relay board
 """
-import flask
 import RPi.GPIO as GPIO
 import time
 
