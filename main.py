@@ -5,7 +5,6 @@ import flask
 import RPi.GPIO as GPIO
 import time
 
-
 GPIO.setMode(GPIO.BCM)
 
 # Init list with pin numbers
