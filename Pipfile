@@ -7,7 +7,7 @@ verify_ssl = true
 
 [packages]
 flask = "*"
-rpi = "*"
+rpi-gpio = "*"
 
 [requires]
 python_version = "3.5"
