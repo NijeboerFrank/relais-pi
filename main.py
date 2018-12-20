@@ -57,16 +57,41 @@ def run_1():
 
 
 @app.route("/program/<int:program_id>")
-def run_10(program_id):
-    if 0 <= program_id < 16:
-        switch_decimal(program_id)
-        return "Switched %s" % program_id
+def run_decimal(program_id):
+    """
+    If this is called it will turn on the relays in a binary representation of the decimal that is provided by the get
+    request. After this is called there should be some input that signal the machine can start. This function will wait
+    for that input and otherwise return a timeout.
+
+    :param program_id: Decimal representation of the program ID number.
+    """
+    ret = GPIO.wait_for_edge(input_pin, GPIO.RISING, timeout=5000)
+    if ret is None:
+        return "Timeout occurred"
     else:
-        return "Program ID must be between 0 and 15"
+        if 0 <= program_id < 16:
+            switch_decimal(program_id)
+            return "Switched %s!" % program_id
+        else:
+            return "Program ID must be between 0 and 15"
 
 
 def switch_decimal(decimal):
+    """
+    Function for switching on the relays in the form of a binary number.
+
+    :param decimal: Decimal number that should be represented in binary.
+    """
     binary = get_binary(decimal)
+    switch_binary(binary)
+
+
+def switch_binary(binary):
+    """
+    Function for switching on the relay in the form of a binary number.
+
+    :param binary: Array containing the binary number.
+    """
     on = []
     for b in range(0, len(binary)):
         if binary[b] > 0:
@@ -106,6 +131,7 @@ def get_binary(decimal):
 def callback_input(pin):
     """
     Function that keeps a relay powered on when a button is pressed. (In this case when GPIO 12 reads input)
+    
     :param pin: Pin number of the GPIO pin.
     """
     while GPIO.input(pin) == 1:
