@@ -10,7 +10,7 @@ app = Flask(__name__)
 GPIO.setmode(GPIO.BCM)
 
 # Init list with pin numbers
-
+# Order depending on how the GPIO pins are hooked up, in this case GPIO 17 controls relay 1
 pinList = [17, 4, 3, 2]
 
 # Loop through pins and set mode and state to 'high'
@@ -18,6 +18,8 @@ print("setting pins")
 for i in pinList:
     GPIO.setup(i, GPIO.OUT)
     GPIO.output(i, GPIO.HIGH)
+
+GPIO.setup(12, GPIO.IN, GPIO.PUD_DOWN)
 
 
 @app.route("/")
@@ -55,6 +57,7 @@ def switch_relay(number, slp_time):
     time.sleep(slp)
     GPIO.output(pinList[number - 1], GPIO.HIGH)
 
+
 @atexit.register
 def exit_app():
     """
@@ -63,3 +66,9 @@ def exit_app():
     print("  Exiting Server...")
     GPIO.cleanup()
 
+
+def callback_input(pin):
+    print("button pressed!")
+
+
+GPIO.add_event_detect(12, GPIO.RISING, callback=callback_input)  # add rising edge detection on a channel
