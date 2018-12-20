@@ -68,7 +68,9 @@ def exit_app():
 
 
 def callback_input(pin):
-    GPIO.output(pinList[1], GPIO.input(12))
+    while GPIO.input(pin) == 1:
+        GPIO.output(pinList[1], GPIO.LOW)
+    GPIO.output(pinList[1], GPIO.HIGH)
 
 
 GPIO.add_event_detect(12, GPIO.RISING, callback=callback_input)  # add rising edge detection on a channel
