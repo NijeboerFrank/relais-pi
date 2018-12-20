@@ -56,9 +56,17 @@ def run_1():
     return "Switched light 1!"
 
 
-@app.route("/10")
-def run_10():
-    binary = get_binary(10)
+@app.route("/program/<int:program_id>")
+def run_10(program_id):
+    if 0 <= program_id < 16:
+        switch_decimal(program_id)
+        return "Switched %s" % program_id
+    else:
+        return "Program ID must be between 0 and 15"
+
+
+def switch_decimal(decimal):
+    binary = get_binary(decimal)
     on = []
     for b in range(0, len(binary)):
         if binary[b] > 0:
