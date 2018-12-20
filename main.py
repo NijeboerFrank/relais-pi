@@ -61,7 +61,8 @@ def run_10():
     binary = get_binary(10)
     on = []
     for b in range(0, len(binary)):
-        on.append(b + 1)
+        if binary[b] > 0:
+            on.append(b)
     for o in on:
         GPIO.output(pin_list[o], GPIO.LOW)
     time.sleep(sleep_time)
