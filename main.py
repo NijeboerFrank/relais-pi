@@ -13,12 +13,16 @@ GPIO.setmode(GPIO.BCM)
 # Order depending on how the GPIO pins are hooked up, in this case GPIO 17 controls relay 1
 pin_list = [17, 4, 3, 2]
 input_pin = 12
+input_pins = [16, 20, 21]
 
 # Loop through pins and set mode and state to 'high'
 print("setting pins")
 for i in pin_list:
     GPIO.setup(i, GPIO.OUT)
     GPIO.output(i, GPIO.HIGH)
+
+for i in input_pins:
+    GPIO.setup(i, GPIO.IN, GPIO.PUD_DOWN)
 
 GPIO.setup(12, GPIO.IN, GPIO.PUD_DOWN)
 
@@ -54,6 +58,13 @@ def run_2():
 def run_1():
     switch_relay(number=1, slp_time=1)
     return "Switched light 1!"
+
+
+@app.route("/input")
+def check_input():
+    inp = read_input()
+    print(inp)
+    return "%s, %s, %s" % (inp[0], inp[1], inp[2])
 
 
 @app.route("/program/<int:program_id>")
@@ -113,6 +124,11 @@ def switch_relay(number, slp_time):
     GPIO.output(pin_list[number - 1], GPIO.LOW)
     time.sleep(slp)
     GPIO.output(pin_list[number - 1], GPIO.HIGH)
+
+
+def read_input():
+    ret = [GPIO.input(input_pins[0]), GPIO.input(input_pins[1]), GPIO.input(input_pins[2])]
+    return ret
 
 
 @atexit.register
