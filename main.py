@@ -131,7 +131,7 @@ def get_binary(decimal):
 def callback_input(pin):
     """
     Function that keeps a relay powered on when a button is pressed. (In this case when GPIO 12 reads input)
-    
+
     :param pin: Pin number of the GPIO pin.
     """
     while GPIO.input(pin) == 1:
@@ -140,4 +140,4 @@ def callback_input(pin):
 
 
 # Add callback for button press
-GPIO.add_event_detect(12, GPIO.RISING, callback=callback_input)  # add rising edge detection on a channel
+# GPIO.add_event_detect(12, GPIO.RISING, callback=callback_input)  # add rising edge detection on a channel
