@@ -56,6 +56,19 @@ def run_1():
     return "Switched light 1!"
 
 
+@app.route("/10")
+def run_10():
+    binary = get_binary(10)
+    on = []
+    for b in range(0, len(binary)):
+        on.append(b + 1)
+    for o in on:
+        GPIO.output(pin_list[o], GPIO.LOW)
+    time.sleep(sleep_time)
+    for o in on:
+        GPIO.output(pin_list[o], GPIO.HIGH)
+
+
 def switch_relay(number, slp_time):
     """
     Function that switches a relay on.
@@ -75,6 +88,10 @@ def exit_app():
     """
     print("  Exiting Server...")
     GPIO.cleanup()
+
+
+def get_binary(decimal):
+    return [int(x) for x in bin(decimal)[2:]]
 
 
 def callback_input(pin):
