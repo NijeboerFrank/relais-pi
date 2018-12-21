@@ -75,12 +75,13 @@ def run_decimal(program_id):
 
     :param program_id: Decimal representation of the program ID number.
     """
+    switch_decimal(program_id)
     if 0 <= program_id < 16:
         ret = GPIO.wait_for_edge(input_pin, GPIO.RISING, timeout=5000)
         if ret is None:
             return "Timeout occurred"
         else:
-            switch_decimal(program_id)
+            switch_relay(1, 1.5)
             return "Switched %s!" % program_id
     else:
         return "Program ID must be between 0 and 15"
