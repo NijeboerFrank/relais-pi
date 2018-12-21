@@ -21,9 +21,12 @@ for i in pin_list:
     GPIO.setup(i, GPIO.OUT)
     GPIO.output(i, GPIO.HIGH)
 
+# Set the pins for the GPIO input. PUD_DOWN means that when the pin has no input the value is low (0). Without this
+# value the pin will 'float'.
 for i in input_pins:
     GPIO.setup(i, GPIO.IN, GPIO.PUD_DOWN)
 
+# Set the input pin for the 'control' pin.
 GPIO.setup(12, GPIO.IN, GPIO.PUD_DOWN)
 
 
@@ -34,12 +37,8 @@ def basic_test():
 
 @app.route("/4")
 def run_4():
-    ret = GPIO.wait_for_edge(input_pin, GPIO.RISING, timeout=5000)
-    if ret is None:
-        return "Timeout occurred"
-    else:
-        switch_relay(number=4, slp_time=1)
-        return "Switched light 4!"
+    switch_relay(number=4, slp_time=1)
+    return "Switched light 4!"
 
 
 @app.route("/3")
@@ -141,7 +140,16 @@ def exit_app():
 
 
 def get_binary(decimal):
-    return [int(x) for x in bin(decimal)[2:]]
+    """
+    Function that gets an array that represents a decimal number.
+
+    :param decimal: Decimal number that must be converted.
+    :return: Array that represents a number number with 4 bits.
+    """
+    ret = [int(x) for x in bin(decimal)[2:]]
+    while len(ret) < 4:
+        ret.insert(0, 0)
+    return ret
 
 
 def callback_input(pin):
